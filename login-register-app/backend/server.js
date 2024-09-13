@@ -55,6 +55,11 @@ app.post('/register', [
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
+    // تحقق من صحة البيانات
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Please provide both email and password' });
+    }
+
     const sql = `SELECT * FROM users WHERE email = ?`;
     db.query(sql, [email], (err, results) => {
         if (err) {
@@ -62,19 +67,21 @@ app.post('/login', (req, res) => {
             return res.status(500).json({ error: 'An error occurred during login' });
         }
         if (results.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ error: 'Email not found' });
         }
 
         const user = results[0];
         const passwordMatch = bcrypt.compareSync(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'Incorrect password' });
         }
 
+        // توليد JWT عند نجاح التحقق
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
-        res.status(200).json({ token });
+        res.status(200).json({ message: 'Login successful', token });
     });
 });
+
 
 // عرض جميع المستخدمين المسجلين
 app.get('/users', (req, res) => {

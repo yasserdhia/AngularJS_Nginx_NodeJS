@@ -34,3 +34,13 @@
     cursor: pointer;
   }
   
+  a {
+    cursor: pointer; /* تغيير المؤشر إلى pointer عند التمرير فوق الرابط */
+    color: #007bff; /* لون رابط */
+    text-decoration: none; /* إزالة التسطير الافتراضي */
+  }
+  
+  a:hover {
+    text-decoration: underline; /* إضافة تسطير عند التمرير */
+  }
+  
