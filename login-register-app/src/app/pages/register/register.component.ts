@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router'; // استيراد RouterModule
 import { FormsModule } from '@angular/forms'; // تأكد من استيراد FormsModule
+
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule], // إضافة FormsModule هنا
+  imports: [FormsModule,RouterModule], // إضافة FormsModule هنا
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })

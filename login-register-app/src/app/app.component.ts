@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'] // تصحيح styleUrls إلى الجمع
 })
 export class AppComponent {
   title = 'login-register-app';
