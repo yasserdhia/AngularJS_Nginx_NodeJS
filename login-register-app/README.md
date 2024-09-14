@@ -1,39 +1,220 @@
-# LoginRegisterApp
+md
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+# AngularJS, Node.js (Express), MySQL, NginX Project
 
-## Development server
+## Project Setup Guide
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project demonstrates a full-stack web application using **AngularJS** for the frontend, **Node.js (Express)** for the backend, **MySQL** as the database, and **NginX** for the web server.
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Prerequisites
 
-## Build
+### For Local Installation:
+- **Node.js** (v18 or above) - [Download from here](https://nodejs.org/en/download/)
+- **Angular CLI** (latest version)
+- **MySQL** (v5.7 or above)
+- **NginX** (for deployment)
+- **Git** (optional)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### For Docker Installation:
+- **Docker** (latest version) - [Download from here](https://www.docker.com/products/docker-desktop)
+- **Docker Compose** (included with Docker Desktop)
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Step 1: Clone the Repository
 
-## Running end-to-end tests
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Step 2: Local Installation
+2.1 Backend Setup (Node.js & MySQL)
+
+    Navigate to the backend directory:
+
+    bash
+
+cd backend
+
+Install the dependencies:
+
+bash
+
+npm install
+
+Create a .env file in the backend folder and add your environment variables:
+
+bash
+
+touch .env
+
+Example .env file:
+
+makefile
+
+NODE_ENV=development
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=yourpassword
+DB_NAME=yasserdb
+JWT_SECRET=your_jwt_secret
+
+Create a MySQL database:
+
+Open MySQL command-line or any GUI tool (e.g., MySQL Workbench) and run the following command:
+
+sql
+
+CREATE DATABASE yasserdb;
+
+Run the backend server:
+
+bash
+
+    npm start
+
+    The backend server will start at http://localhost:3000.
+
+2.2 Frontend Setup (AngularJS)
+
+    Navigate to the frontend directory:
+
+    bash
+
+cd frontend
+
+Install Angular dependencies:
+
+bash
+
+npm install
+
+Run the Angular development server:
+
+bash
+
+    ng serve --open
+
+    The frontend server will be available at http://localhost:4200.
+
+2.3 Configure NginX for Deployment
+
+    Install NginX on your local machine.
+        For Ubuntu:
+
+    bash
+
+sudo apt update
+sudo apt install nginx
+
+Configure NginX by editing the default configuration file:
+
+bash
+
+sudo nano /etc/nginx/sites-available/default
+
+Add the following configuration:
+
+perl
+
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root /path/to/your/frontend/dist;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:3000/;
+    }
+}
+
+Restart NginX to apply the configuration:
+
+bash
+
+    sudo service nginx restart
+
+Step 3: Docker Installation
+3.1 Setup Docker Containers
+
+    Create a .env file for Docker in the root of your project folder:
+
+    makefile
+
+DB_HOST=mysql
+DB_USER=root
+DB_PASSWORD=password
+DB_NAME=yasserdb
+JWT_SECRET=your_jwt_secret
+
+Build and run the Docker containers:
+
+From the root of your project directory, run the following command:
+
+bash
+
+    docker-compose up --build
+
+    This command will build and start the backend, frontend, and MySQL containers.
+        Frontend: http://localhost:8081
+        Backend: http://localhost:3000
+
+3.2 Access MySQL inside Docker
+
+Run the following command to access the MySQL service:
+
+bash
+
+docker exec -it mysql mysql -u root -p
+
+Enter the password password when prompted.
+Step 4: Managing the Database
+4.1 Creating Tables
+
+Once inside the MySQL shell, run the following SQL to create a table:
+
+sql
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255)
+);
+
+4.2 Viewing Tables
+
+To view the existing tables in the database:
+
+sql
+
+USE yasserdb;
+SHOW TABLES;
+
+Step 5: Stopping the Application
+
+To stop the Docker containers, run:
+
+bash
+
+docker-compose down
+
+Additional Notes
+
+    Local Development: You can run the backend and frontend servers independently with npm start and ng serve, respectively.
+    Docker Deployment: Use Docker Compose for a complete setup of backend, frontend, and database services.
+
+markdown
 
 
-## Docker setup
+### Instructions:
+1. Replace the placeholder `your-username` and `your-repository` in the `git clone` command with your actual GitHub repository link.
+2. Update any environment-specific configurations as needed.
 
-Build the Docker image
-`docker build -t login-register-app .`
-
-Run the Docker container
-`docker run -p 8081:80 login-register-app`
-
-
-
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This `README.md` provides detailed steps for both local and Docker installations and should work well for your project
