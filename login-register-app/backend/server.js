@@ -9,13 +9,15 @@ require('dotenv').config(); // لاستخدام المتغيرات البيئي�
 
 const app = express();
 
-// إعداد MySQL
+// إعداد MySQL باستخدام المتغيرات البيئية
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'yasser',
-    password: 'yasserdb',
-    database: 'yasserdb'
+    host: process.env.DB_HOST || 'mysql',  // استخدم اسم الخدمة
+    user: process.env.DB_USER || 'yasser',
+    password: process.env.DB_PASSWORD || 'yasserdb',
+    database: process.env.DB_DATABASE || 'yasserdb',
+    port: process.env.DB_PORT || 3306
 });
+
 
 db.connect(err => {
     if (err) throw err;
@@ -81,7 +83,6 @@ app.post('/login', (req, res) => {
         res.status(200).json({ message: 'Login successful', token });
     });
 });
-
 
 // عرض جميع المستخدمين المسجلين
 app.get('/users', (req, res) => {
