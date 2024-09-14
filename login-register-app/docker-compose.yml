@@ -47,9 +47,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    volumes:
+      - mysql-data:/var/lib/mysql # تم إضافة حجم لحفظ البيانات
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
