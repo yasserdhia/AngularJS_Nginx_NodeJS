@@ -3,13 +3,15 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { UsersComponent } from './users/users.component'; // استيراد مكون UsersComponent
 import { TestPageComponent } from './test-page/test-page.component'; // استيراد مكون الاختبار
+import { ProfileComponent } from './profile/profile.component'; // استيراد مكون صفحة البروفايل
+import { AuthGuard } from './guards/auth.guard'; // استيراد الحارس من المجلد الجديد
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent }, // تحميل LoginComponent بشكل مباشر
-  { path: 'register', component: RegisterComponent }, // تحميل RegisterComponent بشكل مباشر
-  { path: 'users', component: UsersComponent }, // إضافة مسار UsersComponent
-  { path: 'test', component: TestPageComponent }, // إضافة المسار
-  { path: '**', redirectTo: 'login' }, // إعادة توجيه أي مسار غير معروف إلى صفحة login
-  { path: '**', redirectTo: 'test' } // إعادة التوجيه إلى صفحة الاختبار بشكل افتراضي
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'users', component: UsersComponent },
+  { path: 'test', component: TestPageComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }, // حماية صفحة الملف الشخصي بالحارس
+  { path: '**', redirectTo: 'login' }
 ];

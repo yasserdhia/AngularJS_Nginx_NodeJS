@@ -13,12 +13,16 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=yasserdb
       - JWT_SECRET=your_jwt_secret
-      - DB_PORT=3306  # أضفت المتغير الخاص بالمنفذ
+      - DB_PORT=3306
     ports:
       - "3000:3000"
     depends_on:
       mysql:
         condition: service_healthy
+    volumes:
+      - ./backend:/app  # مشاركة مجلد backend مع الحاوية
+      - /app/node_modules  # استثناء مجلد node_modules
+    command: nodemon --legacy-watch server.js  # تشغيل nodemon مع تفعيل legacy watch
     networks:
       - app-network
 
@@ -31,6 +35,9 @@ services:
       - "8081:80"
     depends_on:
       - backend
+    volumes:
+      - ./frontend:/app  # مشاركة مجلد frontend مع الحاوية
+      - /app/node_modules  # استثناء مجلد node_modules
     networks:
       - app-network
 
@@ -48,7 +55,7 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - mysql-data:/var/lib/mysql # تم إضافة حجم لحفظ البيانات
+      - mysql-data:/var/lib/mysql  # حجم لحفظ بيانات MySQL
     networks:
       - app-network
 

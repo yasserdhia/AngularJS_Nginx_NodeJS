@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router'; // استيراد Router للتوجيه بعد تسجيل الدخول
 import { FormsModule } from '@angular/forms';
-import Swal from 'sweetalert2'; // استيراد SweetAlert2
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -15,7 +15,7 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {} // إضافة Router في الكونستركتور
 
   login() {
     if (this.email && this.password) {
@@ -27,10 +27,11 @@ export class LoginComponent {
               text: 'You have successfully logged in.',
               icon: 'success',
               showConfirmButton: false,
-              timer: 1500, // الرسالة تختفي بعد 1.5 ثانية
-              position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+              timer: 1500,
+              position: 'center'
             });
             localStorage.setItem('token', response.token);
+            this.router.navigate(['/profile']); // التوجيه إلى صفحة الملف الشخصي بعد تسجيل الدخول
           },
           (error) => {
             Swal.fire({
@@ -38,7 +39,7 @@ export class LoginComponent {
               text: 'Invalid credentials. Please try again.',
               icon: 'error',
               confirmButtonText: 'Retry',
-              position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+              position: 'center'
             });
           }
         );
@@ -48,7 +49,7 @@ export class LoginComponent {
         text: 'Please enter both email and password',
         icon: 'warning',
         confirmButtonText: 'OK',
-        position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+        position: 'center'
       });
     }
   }

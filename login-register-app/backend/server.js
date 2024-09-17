@@ -3,24 +3,27 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const cors = require('cors'); // إضافة CORS
-const { check, validationResult } = require('express-validator'); // إضافة express-validator للتحقق من المدخلات
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 require('dotenv').config(); // لاستخدام المتغيرات البيئية
 
 const app = express();
 
 // إعداد MySQL باستخدام المتغيرات البيئية
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'mysql',  // استخدم اسم الخدمة
+    host: process.env.DB_HOST || 'mysql',
     user: process.env.DB_USER || 'yasser',
     password: process.env.DB_PASSWORD || 'yasserdb',
     database: process.env.DB_DATABASE || 'yasserdb',
     port: process.env.DB_PORT || 3306
 });
 
-
+// الاتصال بقاعدة البيانات
 db.connect(err => {
-    if (err) throw err;
+    if (err) {
+        console.error('Error connecting to MySQL:', err);
+        process.exit(1); // إنهاء العملية إذا فشل الاتصال بقاعدة البيانات
+    }
     console.log('Connected to MySQL');
 });
 
@@ -32,8 +35,8 @@ app.use(bodyParser.json());
 
 // تسجيل المستخدم
 app.post('/register', [
-    check('email').isEmail(),
-    check('password').isLength({ min: 6 })
+    check('email').isEmail().withMessage('Invalid email format'),
+    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -47,13 +50,13 @@ app.post('/register', [
     db.query(sql, [name, email, hashedPassword], (err, result) => {
         if (err) {
             console.error('Error during registration:', err);
-            return res.status(500).json({ error: 'An error occurred during registration' });
+            return res.status(500).json({ error: 'An error occurred during registration', details: err });
         }
-        res.status(200).json({ message: 'Registration successful' });
+        res.status(200).json({ message: 'Registration successful', userId: result.insertId });
     });
 });
 
-// تسجيل الدخول
+// تسجيل الدخول وتوجيه المستخدم إلى ملفه الشخصي
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -66,7 +69,7 @@ app.post('/login', (req, res) => {
     db.query(sql, [email], (err, results) => {
         if (err) {
             console.error('Error during login:', err);
-            return res.status(500).json({ error: 'An error occurred during login' });
+            return res.status(500).json({ error: 'An error occurred during login', details: err });
         }
         if (results.length === 0) {
             return res.status(404).json({ error: 'Email not found' });
@@ -80,23 +83,48 @@ app.post('/login', (req, res) => {
 
         // توليد JWT عند نجاح التحقق
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
-        res.status(200).json({ message: 'Login successful', token });
+
+        // إرجاع التوكن ومعلومات المستخدم
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
+        });
     });
 });
 
-// عرض جميع المستخدمين المسجلين
-app.get('/users', (req, res) => {
-    const sql = 'SELECT * FROM users';
-    db.query(sql, (err, results) => {
+// عرض صفحة الملف الشخصي بعد التحقق من التوكن
+app.get('/profile', (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // استخلاص التوكن من الهيدر
+
+    if (!token) {
+        return res.status(403).json({ error: 'No token provided' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, decoded) => {
         if (err) {
-            console.error('Error fetching users:', err);
-            return res.status(500).json({ error: 'An error occurred while fetching users' });
+            return res.status(500).json({ error: 'Failed to authenticate token' });
         }
-        res.status(200).json(results);
+
+        const sql = `SELECT id, name, email FROM users WHERE id = ?`;
+        db.query(sql, [decoded.id], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error fetching profile', details: err });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            res.status(200).json(results[0]);
+        });
     });
 });
 
 // تشغيل الخادم على المنفذ 3000
 app.listen(3000, () => {
     console.log('Server running on port 3000');
-});
+}); 
