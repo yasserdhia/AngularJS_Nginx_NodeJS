@@ -1,0 +1,7 @@
+{
+    "watch": ["./frontend", "./backend"],
+    "ext": "js,json,ts,html,css",
+    "exec": "docker-compose build && docker-compose up -d",
+    "ignore": ["./frontend/node_modules", "./backend/node_modules", "./frontend/dist"]
+  }
+  
