@@ -1,7 +1,6 @@
 {
-    "watch": ["./","./frontend", "./backend"],
-    "ext": "js,ts,py,php,rb,java,cpp,cs,go,rs,html,css,scss,less,md,xml,json,yml,yaml,ejs,pug,hbs,mustache,ini,sql,csv,toml,properties,sh,bat,svg,png,jpg,jpeg,gif,bmp,ico,mp3,mp4,wav,lua,pl,hs,ex,exs",
-    "exec": "docker-compose build && docker-compose up -d",
-    "ignore": ["./frontend/node_modules", "./backend/node_modules", "./frontend/dist"]
-  }
-  
+  "watch": ["./","./frontend", "./backend"],
+  "ext": "js,ts,py,php,rb,java,cpp,cs,go,rs,html,css,scss,less,md,xml,json,yml,yaml,ejs,pug,hbs,mustache,ini,sql,csv,toml,properties,sh,bat,svg,png,jpg,jpeg,gif,bmp,ico,mp3,mp4,wav,lua,pl,hs,ex,exs",
+  "exec": "docker-compose build && docker-compose up -d && call copy_files.bat",
+  "ignore": ["./frontend/node_modules", "./backend/node_modules", "./frontend/dist"]
+}
