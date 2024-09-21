@@ -20,9 +20,9 @@ services:
       mysql:
         condition: service_healthy
     volumes:
-      - ./backend:/app  # مشاركة مجلد backend مع الحاوية
-      - /app/node_modules  # استثناء مجلد node_modules
-    command: nodemon --legacy-watch server.js  # تشغيل nodemon مع تفعيل legacy watch
+      - ./backend:/app
+      - /app/node_modules
+    command: nodemon --legacy-watch server.js
     networks:
       - app-network
 
@@ -32,7 +32,7 @@ services:
       dockerfile: ./frontend/Dockerfile
     container_name: frontend-app
     ports:
-      - "8081:80"
+      - "443:443"
     depends_on:
       - backend
     volumes:
@@ -55,7 +55,7 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - mysql-data:/var/lib/mysql  # حجم لحفظ بيانات MySQL
+      - mysql-data:/var/lib/mysql
     networks:
       - app-network
 
