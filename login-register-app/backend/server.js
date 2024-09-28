@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
@@ -5,13 +6,14 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
+const multer = require('multer');
 require('dotenv').config(); // لاستخدام المتغيرات البيئية
 
 const app = express();
 
-// إعداد MySQL باستخدام المتغيرات البيئية
+// إعداد اتصال MySQL باستخدام المتغيرات البيئية أو القيم الافتراضية
 const db = mysql.createConnection({
-    host: process.env.DB_HOST || 'mysql',
+    host: process.env.DB_HOST || 'mysql', // في Docker، استخدم 'mysql' بدل 'localhost'
     user: process.env.DB_USER || 'yasser',
     password: process.env.DB_PASSWORD || 'yasserdb',
     database: process.env.DB_DATABASE || 'yasserdb',
@@ -28,13 +30,30 @@ db.connect(err => {
 });
 
 // تمكين CORS
-app.use(cors());
+const allowedOrigins = ['https://localhost']; // السماح بالوصول من الواجهة الأمامية
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // تمكين إرسال الكوكيز والمعلومات المحمية
+}));
 
 // تمكين body-parser لتحليل JSON
 app.use(bodyParser.json());
 
+// إعداد التخزين للصورة الشخصية باستخدام multer
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
+
 // تسجيل المستخدم
-app.post('/register', [
+app.post('/api/register', [
     check('email').isEmail().withMessage('Invalid email format'),
     check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ], (req, res) => {
@@ -56,11 +75,10 @@ app.post('/register', [
     });
 });
 
-// تسجيل الدخول وتوجيه المستخدم إلى ملفه الشخصي
-app.post('/login', (req, res) => {
+// تسجيل الدخول
+app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    // تحقق من صحة البيانات
     if (!email || !password) {
         return res.status(400).json({ error: 'Please provide both email and password' });
     }
@@ -81,10 +99,8 @@ app.post('/login', (req, res) => {
             return res.status(401).json({ error: 'Incorrect password' });
         }
 
-        // توليد JWT عند نجاح التحقق
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
 
-        // إرجاع التوكن ومعلومات المستخدم
         res.status(200).json({
             message: 'Login successful',
             token,
@@ -97,9 +113,9 @@ app.post('/login', (req, res) => {
     });
 });
 
-// عرض صفحة الملف الشخصي بعد التحقق من التوكن
-app.get('/profile', (req, res) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // استخلاص التوكن من الهيدر
+// عرض الملف الشخصي
+app.get('/api/profile', (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
         return res.status(403).json({ error: 'No token provided' });
@@ -110,7 +126,7 @@ app.get('/profile', (req, res) => {
             return res.status(500).json({ error: 'Failed to authenticate token' });
         }
 
-        const sql = `SELECT id, name, email FROM users WHERE id = ?`;
+        const sql = `SELECT id, name, email, profile_image FROM users WHERE id = ?`;
         db.query(sql, [decoded.id], (err, results) => {
             if (err) {
                 return res.status(500).json({ error: 'Error fetching profile', details: err });
@@ -124,7 +140,49 @@ app.get('/profile', (req, res) => {
     });
 });
 
-// تشغيل الخادم على المنفذ 3000
+// تحديث الملف الشخصي
+app.post('/api/profile/update', upload.single('profileImage'), (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+
+    if (!token) {
+        return res.status(403).json({ error: 'No token provided' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET || 'secret', (err, decoded) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to authenticate token' });
+        }
+
+        const { name, email, password } = req.body;
+        const profileImage = req.file ? req.file.filename : null;
+
+        let query = 'UPDATE users SET name = ?, email = ?';
+        let values = [name, email];
+
+        if (password) {
+            const hashedPassword = bcrypt.hashSync(password, 10);
+            query += ', password = ?';
+            values.push(hashedPassword);
+        }
+
+        if (profileImage) {
+            query += ', profile_image = ?';
+            values.push(profileImage);
+        }
+
+        query += ' WHERE id = ?';
+        values.push(decoded.id);
+
+        db.query(query, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error updating profile', details: err });
+            }
+            res.status(200).json({ message: 'Profile updated successfully' });
+        });
+    });
+});
+
+// تشغيل الخادم على HTTP
 app.listen(3000, () => {
     console.log('Server running on port 3000');
-}); 
+});

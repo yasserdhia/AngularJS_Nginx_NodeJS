@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     // طلب البيانات من خادم Node.js
-    this.http.get('http://localhost:3000/users')
+    this.http.get('/api/users')
       .subscribe((data: any) => {
         this.users = data; // تخزين البيانات المسترجعة
       }, error => {

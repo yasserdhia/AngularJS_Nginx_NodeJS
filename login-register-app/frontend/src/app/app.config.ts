@@ -6,6 +6,6 @@ import { provideHttpClient } from '@angular/common/http'; // استيراد Http
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient() // إضافة HttpClient هنا
+    provideHttpClient() // فقط توفير HTTP هنا
   ]
 };

@@ -11,7 +11,7 @@ services:
       - DB_HOST=mysql
       - DB_USER=root
       - DB_PASSWORD=password
-      - DB_NAME=yasserdb
+      - DB_DATABASE=yasserdb
       - JWT_SECRET=your_jwt_secret
       - DB_PORT=3306
     ports:
@@ -19,9 +19,10 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+    # إزالة الـ Volumes لتجنب استبدال ملفات البناء
+    # volumes:
+    #   - ./backend:/app
+    #   - /app/node_modules
     command: nodemon --legacy-watch server.js
     networks:
       - app-network
@@ -35,9 +36,10 @@ services:
       - "443:443"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app  # مشاركة مجلد frontend مع الحاوية
-      - /app/node_modules  # استثناء مجلد node_modules
+    # إزالة الـ Volumes لتجنب استبدال ملفات البناء
+    # volumes:
+    #   - ./frontend:/app
+    #   - /app/node_modules
     networks:
       - app-network
 

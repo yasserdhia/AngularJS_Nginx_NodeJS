@@ -20,7 +20,7 @@ export class RegisterComponent {
 
   register() {
     if (this.name && this.email && this.password) {
-      this.http.post('http://localhost:3000/register', { name: this.name, email: this.email, password: this.password })
+      this.http.post('/api/register', { name: this.name, email: this.email, password: this.password })
         .subscribe(
           () => {
             Swal.fire({

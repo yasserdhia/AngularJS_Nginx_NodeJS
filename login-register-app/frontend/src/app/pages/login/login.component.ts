@@ -19,7 +19,7 @@ export class LoginComponent {
 
   login() {
     if (this.email && this.password) {
-      this.http.post('http://localhost:3000/login', { email: this.email, password: this.password })
+      this.http.post('/api/login', { email: this.email, password: this.password })
         .subscribe(
           (response: any) => {
             Swal.fire({
