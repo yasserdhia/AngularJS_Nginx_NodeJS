@@ -1,5 +1,5 @@
 import { Component , OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // استيراد FormsModule إذا كنت تستخدم standalone
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  standalone: true,  // تأكد من أنك تستخدم standalone هنا
-  imports: [FormsModule]  // إضافة FormsModule هنا في المكون نفسه
+  standalone: true,
+  imports: [FormsModule]
 })
 
 export class ProfileComponent implements OnInit {
@@ -33,6 +33,10 @@ export class ProfileComponent implements OnInit {
     }).subscribe(
       (response: any) => {
         this.user = response;
+        // تعيين صورة افتراضية إذا لم تكن متاحة
+        if (!this.user.profile_image) {
+          this.user.profile_image = 'assets/default-profile.png';
+        }
       },
       (error) => {
         console.error('Error fetching profile', error);
@@ -61,6 +65,10 @@ export class ProfileComponent implements OnInit {
     }).subscribe(
       (response: any) => {
         alert('تم تحديث البيانات بنجاح');
+        // إذا تم رفع صورة جديدة، قم بتحديث رابط الصورة
+        if (response.profile_image) {
+          this.user.profile_image = response.profile_image;
+        }
       },
       (error) => {
         console.error('Error updating profile', error);

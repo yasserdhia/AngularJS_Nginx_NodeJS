@@ -1,23 +1,27 @@
 <div class="profile-container">
+  <!-- بطاقة الملف الشخصي -->
   <div class="profile-card">
-    <img [src]="user.pictureUrl" alt="Profile Picture" class="profile-image">
+    <img [src]="user.profile_image ? user.profile_image : 'assets/default-profile.png'" alt="Profile Picture" class="profile-image">
     <h2>{{ user.name }}</h2>
     <p>Email: {{ user.email }}</p>
   </div>
 
-  <form (ngSubmit)="updateProfile()">
-    <label for="name">الاسم:</label>
-    <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
+  <!-- استمارة تعديل الملف الشخصي -->
+  <div class="profile-form">
+    <form (ngSubmit)="updateProfile()">
+      <label for="name">الاسم:</label>
+      <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
 
-    <label for="email">الإيميل:</label>
-    <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
+      <label for="email">الإيميل:</label>
+      <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
 
-    <label for="password">كلمة المرور:</label>
-    <input type="password" id="password" [(ngModel)]="user.password" name="password" />
+      <label for="password">كلمة المرور:</label>
+      <input type="password" id="password" [(ngModel)]="user.password" name="password" />
 
-    <label for="profileImage">الصورة الشخصية:</label>
-    <input type="file" id="profileImage" (change)="onFileChange($event)" />
+      <label for="profileImage">الصورة الشخصية:</label>
+      <input type="file" id="profileImage" (change)="onFileChange($event)" />
 
-    <button type="submit">حفظ التعديلات</button>
-  </form>
+      <button type="submit">حفظ التعديلات</button>
+    </form>
+  </div>
 </div>
