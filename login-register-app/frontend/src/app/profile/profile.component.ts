@@ -1,14 +1,15 @@
-import { Component , OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // إضافة CommonModule
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule] // إضافة CommonModule هنا
 })
 
 export class ProfileComponent implements OnInit {
@@ -27,13 +28,19 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-
+  
     this.http.get('/api/profile', {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe(
       (response: any) => {
         this.user = response;
-        // تعيين صورة افتراضية إذا لم تكن متاحة
+  
+        // إذا كانت الصورة موجودة، قم بتحديث المسار ليشير إلى مجلد 'uploads'
+        if (this.user.profile_image && !this.user.profile_image.startsWith('http')) {
+          this.user.profile_image = `http://localhost:3000/uploads/${this.user.profile_image}`;
+        }
+  
+        // إذا لم تكن الصورة موجودة، استخدم الصورة الافتراضية
         if (!this.user.profile_image) {
           this.user.profile_image = 'assets/default-profile.png';
         }
@@ -44,8 +51,10 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+  
+  
+  
 
-  // تحديث البيانات الشخصية
   updateProfile(): void {
     const formData = new FormData();
     formData.append('name', this.user.name);
@@ -65,7 +74,6 @@ export class ProfileComponent implements OnInit {
     }).subscribe(
       (response: any) => {
         alert('تم تحديث البيانات بنجاح');
-        // إذا تم رفع صورة جديدة، قم بتحديث رابط الصورة
         if (response.profile_image) {
           this.user.profile_image = response.profile_image;
         }
@@ -76,7 +84,6 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  // تحميل الصورة الشخصية
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files[0];

@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
@@ -40,6 +39,9 @@ app.use(cors({
 
 // تمكين body-parser لتحليل JSON
 app.use(bodyParser.json());
+
+// جعل مجلد 'uploads' ثابت للوصول إليه عبر HTTP
+app.use('/uploads', express.static('uploads'));
 
 // إعداد التخزين للصورة الشخصية باستخدام multer
 const storage = multer.diskStorage({
@@ -133,6 +135,11 @@ app.get('/api/profile', (req, res) => {
             }
             if (results.length === 0) {
                 return res.status(404).json({ error: 'User not found' });
+            }
+
+            // تحديث رابط الصورة في استجابة الملف الشخصي
+            if (results[0].profile_image) {
+                results[0].profile_image = `http://localhost:3000/uploads/${results[0].profile_image}`;
             }
 
             res.status(200).json(results[0]);

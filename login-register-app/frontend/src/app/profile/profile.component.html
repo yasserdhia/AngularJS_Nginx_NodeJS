@@ -1,8 +1,8 @@
 <div class="profile-container">
   <!-- بطاقة الملف الشخصي -->
   <div class="profile-card">
-    <img [src]="user.profile_image ? user.profile_image : 'assets/default-profile.png'" alt="Profile Picture" class="profile-image">
-    <h2>{{ user.name }}</h2>
+    <img *ngIf="user.profile_image" [src]="user.profile_image" alt="Profile Picture" class="profile-image">
+        <h2>{{ user.name }}</h2>
     <p>Email: {{ user.email }}</p>
   </div>
 
