@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto'); // لاستخدامه في إنشاء رمز أمان فريد
 require('dotenv').config(); // لاستخدام المتغيرات البيئية
 
 const app = express();
@@ -53,6 +55,15 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
+
+// إعداد nodemailer مع معلومات بريدك الإلكتروني
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER, // بريدك الإلكتروني
+        pass: process.env.EMAIL_PASSWORD // كلمة مرور بريدك الإلكتروني
+    }
+});
 
 // تسجيل المستخدم
 app.post('/api/register', [
@@ -185,6 +196,69 @@ app.post('/api/profile/update', upload.single('profileImage'), (req, res) => {
                 return res.status(500).json({ error: 'Error updating profile', details: err });
             }
             res.status(200).json({ message: 'Profile updated successfully' });
+        });
+    });
+});
+
+// نقطة نهاية لإرسال رابط إعادة تعيين كلمة المرور
+app.post('/api/forgot-password', (req, res) => {
+    const { email } = req.body;
+
+    // إنشاء رمز أمان فريد
+    const token = crypto.randomBytes(32).toString('hex');
+    
+    // تعيين صلاحية الرمز لمدة ساعة
+    const expiration = Date.now() + 3600000; // ساعة واحدة
+
+    // حفظ الرمز وصلاحيته في قاعدة البيانات
+    const sql = `UPDATE users SET reset_token = ?, reset_token_expiration = ? WHERE email = ?`;
+    db.query(sql, [token, expiration, email], (err, result) => {
+        if (err) {
+            console.error('Error saving reset token:', err);
+            return res.status(500).json({ error: 'Error saving reset token' });
+        }
+
+        // إعداد رابط إعادة التعيين الذي سيتم إرساله عبر البريد الإلكتروني
+        const resetUrl = `https://localhost/reset-password?token=${token}&email=${email}`;
+
+        // إعداد محتوى البريد الإلكتروني
+        const mailOptions = {
+            to: email,
+            subject: 'إعادة تعيين كلمة المرور',
+            text: `انقر على الرابط التالي لإعادة تعيين كلمة المرور: ${resetUrl}`
+        };
+
+        // إرسال البريد الإلكتروني
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.error('Error sending email:', err);
+                return res.status(500).json({ error: 'Error sending email' });
+            }
+            res.status(200).json({ message: 'تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني' });
+        });
+    });
+});
+
+// نقطة نهاية لإعادة تعيين كلمة المرور
+app.post('/api/reset-password', (req, res) => {
+    const { token, email, password } = req.body;
+
+    // تحقق من صحة الرمز وتطابقه مع البريد الإلكتروني
+    const sql = `SELECT * FROM users WHERE email = ? AND reset_token = ? AND reset_token_expiration > ?`;
+    db.query(sql, [email, token, Date.now()], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(400).json({ error: 'Invalid or expired token' });
+        }
+
+        // تحديث كلمة المرور الجديدة
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const updateSql = `UPDATE users SET password = ?, reset_token = NULL, reset_token_expiration = NULL WHERE email = ?`;
+        db.query(updateSql, [hashedPassword, email], (err, result) => {
+            if (err) {
+                console.error('Error resetting password:', err);
+                return res.status(500).json({ error: 'Error resetting password' });
+            }
+            res.status(200).json({ message: 'Password reset successful' });
         });
     });
 });

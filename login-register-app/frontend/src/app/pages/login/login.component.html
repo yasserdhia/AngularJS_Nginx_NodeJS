@@ -1,17 +1,19 @@
 <div class="container login-container">
     <h2>Login</h2>
     <form (ngSubmit)="login()"> <!-- استدعاء login() عند الضغط على زر التسجيل -->
-        <div>
-            <label>Email</label>
+        <div class="form-group">
+            <label for="email">Email</label>
             <input type="email" [(ngModel)]="email" name="email" placeholder="Enter your email" required />
         </div>
-        <div>
-            <label>Password</label>
+        <div class="form-group">
+            <label for="password">Password</label>
             <input type="password" [(ngModel)]="password" name="password" placeholder="Enter your password" required />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <p>Don't have an account? <a routerLink="/register">Register here</a></p> <!-- تعديل href إلى routerLink للتوجيه الداخلي -->
-
+    
+    <div class="additional-links">
+        <p>Don't have an account? <a routerLink="/register">Register here</a></p> <!-- تعديل href إلى routerLink للتوجيه الداخلي -->
+        <p><a routerLink="/forgot-password">Forgot your password?</a></p> <!-- رابط لإعادة تعيين كلمة المرور -->
+    </div>
 </div>
-

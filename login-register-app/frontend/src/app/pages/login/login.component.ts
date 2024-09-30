@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'; // استيراد Router للتوجيه بعد تسجيل الدخول
+import { Router, RouterModule } from '@angular/router'; // استيراد Router و RouterModule
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule], // إضافة RouterModule هنا للتأكد من عمل التوجيه
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
