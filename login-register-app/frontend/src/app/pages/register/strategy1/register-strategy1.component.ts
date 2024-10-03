@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import Swal from 'sweetalert2'; // استيراد SweetAlert2
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-register-strategy1',
   standalone: true,
   imports: [FormsModule, RouterModule],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: './register-strategy1.component.html',
+  styleUrls: ['./register-strategy1.component.css']
 })
-export class RegisterComponent {
+export class RegisterStrategy1Component {
   name: string = '';
   email: string = '';
   password: string = '';
@@ -28,8 +28,8 @@ export class RegisterComponent {
               text: 'Your account has been created.',
               icon: 'success',
               showConfirmButton: false,
-              timer: 1500, // الرسالة تختفي بعد 1.5 ثانية
-              position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+              timer: 1500,
+              position: 'center'
             });
           },
           (error) => {
@@ -38,7 +38,7 @@ export class RegisterComponent {
               text: 'Registration failed. Please try again.',
               icon: 'error',
               confirmButtonText: 'Retry',
-              position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+              position: 'center'
             });
           }
         );
@@ -48,7 +48,7 @@ export class RegisterComponent {
         text: 'Please fill in all fields',
         icon: 'warning',
         confirmButtonText: 'OK',
-        position: 'center' // تعديل الموقع ليكون في منتصف الصفحة
+        position: 'center'
       });
     }
   }

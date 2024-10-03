@@ -1,17 +1,23 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { ProfileComponent } from './pages/profile/profile.component'; // استيراد مكون صفحة البروفايل
-import { AuthGuard } from './guards/auth.guard'; // استيراد الحارس من المجلد الجديد
-import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component'; // استيراد مكون "نسيت كلمة المرور"
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component'; // استيراد مكون إعادة تعيين كلمة المرور
+import { AuthGuard } from './guards/auth.guard';
+import { environment } from '../environments/environment';
 
+// Import components based on their strategy folders
+import { LoginStrategy1Component } from './pages/login/strategy1/login-strategy1.component';
+import { RegisterStrategy1Component } from './pages/register/strategy1/register-strategy1.component';
+import { ProfileStrategy1Component } from './pages/profile/strategy1/profile-strategy1.component';
+import { ForgotPasswordStrategy1Component } from './pages/forgot-password/strategy1/forgot-password-strategy1.component';
+import { ResetPasswordStrategy1Component } from './pages/reset-password/strategy1/reset-password-strategy1.component';
+
+// Define routes for different strategies
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }, // حماية صفحة الملف الشخصي بالحارس
-  { path: 'forgot-password', component: ForgotPasswordComponent }, // صفحة "نسيت كلمة المرور"
-  { path: 'reset-password', component: ResetPasswordComponent }, // صفحة إعادة تعيين كلمة المرور
-  { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: `login/${environment.strategyLogin}`, pathMatch: 'full' },
+  { path: `login/${environment.strategyLogin}`, component: LoginStrategy1Component },
+  { path: `register/${environment.strategyRegister}`, component: RegisterStrategy1Component },
+  { path: `profile/${environment.strategyProfile}`, component: ProfileStrategy1Component, canActivate: [AuthGuard] },
+  { path: `forgot-password/${environment.strategyForgotPassword}`, component: ForgotPasswordStrategy1Component },
+  { path: `reset-password/${environment.strategyResetPassword}`, component: ResetPasswordStrategy1Component },
+  
+  // Add wild-card route to redirect to login
+  { path: '**', redirectTo: `login/${environment.strategyLogin}` }
 ];

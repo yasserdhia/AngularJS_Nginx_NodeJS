@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router'; // استيراد Router و RouterModule
+import { Router, RouterModule } from '@angular/router'; // Import Router and RouterModule
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-login-strategy1', // Update selector name to be specific to strategy1
   standalone: true,
-  imports: [FormsModule, RouterModule], // إضافة RouterModule هنا للتأكد من عمل التوجيه
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [FormsModule, RouterModule], // Import RouterModule for navigation
+  templateUrl: './login-strategy1.component.html',
+  styleUrls: ['./login-strategy1.component.css']
 })
-export class LoginComponent {
+export class LoginStrategy1Component { // Update class name to be specific to strategy1
   email: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {} // إضافة Router في الكونستركتور
+  constructor(private http: HttpClient, private router: Router) {}
 
   login() {
     if (this.email && this.password) {
@@ -31,7 +31,8 @@ export class LoginComponent {
               position: 'center'
             });
             localStorage.setItem('token', response.token);
-            this.router.navigate(['/profile']); // التوجيه إلى صفحة الملف الشخصي بعد تسجيل الدخول
+            // Navigate to profile strategy1 page
+            this.router.navigate(['/profile/strategy1']); 
           },
           (error) => {
             Swal.fire({

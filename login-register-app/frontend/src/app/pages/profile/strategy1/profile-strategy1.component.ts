@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; // إضافة CommonModule
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  selector: 'app-profile-strategy1',
+  templateUrl: './profile-strategy1.component.html',
+  styleUrls: ['./profile-strategy1.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule] // إضافة CommonModule هنا
+  imports: [FormsModule, CommonModule]
 })
-
-export class ProfileComponent implements OnInit {
+export class ProfileStrategy1Component implements OnInit {
   user: any = {};
   selectedFile: File | null = null;
 
@@ -25,7 +24,7 @@ export class ProfileComponent implements OnInit {
   getProfile(): void {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login/strategy1']);
       return;
     }
   
@@ -35,25 +34,20 @@ export class ProfileComponent implements OnInit {
       (response: any) => {
         this.user = response;
   
-        // إذا كانت الصورة موجودة، قم بتحديث المسار ليشير إلى مجلد 'uploads'
         if (this.user.profile_image && !this.user.profile_image.startsWith('http')) {
           this.user.profile_image = `http://localhost:3000/uploads/${this.user.profile_image}`;
         }
   
-        // إذا لم تكن الصورة موجودة، استخدم الصورة الافتراضية
         if (!this.user.profile_image) {
           this.user.profile_image = 'assets/default-profile.png';
         }
       },
       (error) => {
         console.error('Error fetching profile', error);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login/strategy1']);
       }
     );
   }
-  
-  
-  
 
   updateProfile(): void {
     const formData = new FormData();
@@ -73,7 +67,7 @@ export class ProfileComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe(
       (response: any) => {
-        alert('تم تحديث البيانات بنجاح');
+        alert('Profile updated successfully');
         if (response.profile_image) {
           this.user.profile_image = response.profile_image;
         }

@@ -19,10 +19,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    # إزالة الـ Volumes لتجنب استبدال ملفات البناء
-    # volumes:
-    #   - ./backend:/app
-    #   - /app/node_modules
+    volumes:
+      - ./backend/uploads:/app/uploads
     command: nodemon --legacy-watch server.js
     networks:
       - app-network

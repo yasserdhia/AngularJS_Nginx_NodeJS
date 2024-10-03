@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // استيراد FormsModule
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css'],
-  standalone: true, // تأكد من أنك تستخدم standalone هنا
-  imports: [FormsModule] // إضافة FormsModule في المكون
+  selector: 'app-reset-password-strategy1',
+  templateUrl: './reset-password-strategy1.component.html',
+  styleUrls: ['./reset-password-strategy1.component.css'],
+  standalone: true,
+  imports: [FormsModule]
 })
-export class ResetPasswordComponent {
+export class ResetPasswordStrategy1Component {
   token: string = '';
   email: string = '';
   password: string = '';
@@ -18,7 +18,6 @@ export class ResetPasswordComponent {
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    // قراءة الرمز والبريد الإلكتروني من رابط إعادة التعيين
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
       this.email = params['email'];
@@ -28,7 +27,7 @@ export class ResetPasswordComponent {
   resetPassword() {
     this.http.post('/api/reset-password', { token: this.token, email: this.email, password: this.password }).subscribe(
       () => {
-        alert('تم إعادة تعيين كلمة المرور بنجاح');
+        alert('Password reset successful');
       },
       (error) => {
         console.error('Error resetting password', error);
