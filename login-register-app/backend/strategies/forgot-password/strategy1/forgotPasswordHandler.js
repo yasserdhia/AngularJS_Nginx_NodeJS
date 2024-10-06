@@ -27,8 +27,11 @@ module.exports = (req, res) => {
             return res.status(500).json({ error: 'Error saving reset token' });
         }
 
-        // Construct reset URL
-        const resetUrl = `https://localhost/reset-password?token=${token}&email=${email}`;
+        // Get strategy for reset password from environment variable
+        const strategy = process.env.STRATEGY_RESET_PASSWORD || 'strategy1';
+
+        // Construct reset URL dynamically based on strategy
+        const resetUrl = `https://localhost/reset-password/${strategy}?token=${token}&email=${email}`;
 
         // Email content
         const mailOptions = {
