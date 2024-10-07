@@ -1,3 +1,5 @@
+import { securityConfig } from '../app/security/securityConfig';
+
 export const environment = {
   production: true,
   strategyLogin: 'strategy1',
@@ -5,4 +7,5 @@ export const environment = {
   strategyProfile: 'strategy1',
   strategyForgotPassword: 'strategy1',
   strategyResetPassword: 'strategy1',
+  security: securityConfig
 };

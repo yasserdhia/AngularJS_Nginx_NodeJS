@@ -14,10 +14,12 @@ export const routes: Routes = [
   { path: '', redirectTo: `login/${environment.strategyLogin}`, pathMatch: 'full' },
   { path: `login/${environment.strategyLogin}`, component: LoginStrategy1Component },
   { path: `register/${environment.strategyRegister}`, component: RegisterStrategy1Component },
+  
+  // Apply the AuthGuard to the following routes to protect them
   { path: `profile/${environment.strategyProfile}`, component: ProfileStrategy1Component, canActivate: [AuthGuard] },
   { path: `forgot-password/${environment.strategyForgotPassword}`, component: ForgotPasswordStrategy1Component },
   { path: `reset-password/${environment.strategyResetPassword}`, component: ResetPasswordStrategy1Component },
   
-  // Add wild-card route to redirect to login
+  // Wild-card route to redirect to login
   { path: '**', redirectTo: `login/${environment.strategyLogin}` }
 ];

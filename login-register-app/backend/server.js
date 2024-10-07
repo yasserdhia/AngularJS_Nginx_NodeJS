@@ -3,8 +3,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer'); // Import multer for file handling
 require('dotenv').config(); // Load environment variables
+const securityConfig = require('./security/securityConfig'); // Import security configurations
 
 const app = express();
+
+// Trust proxy for rate limiting and other middlewares
+app.set('trust proxy', 1); // أو true حسب الحاجة
 
 // Enabling CORS
 const allowedOrigins = ['https://localhost'];
@@ -30,8 +34,20 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname); // Save files with a timestamp to avoid naming conflicts
     }
 });
-
 const upload = multer({ storage: storage }); // Initialize multer with the storage configuration
+
+// Import security middlewares
+const rateLimiter = require('./security/middleware/rateLimiter');
+const validateRequests = require('./security/middleware/validateRequests');
+const authenticator = require('./security/middleware/authenticator');
+
+// Apply security middlewares based on configuration
+if (securityConfig.rateLimiter.enabled) {
+    app.use(rateLimiter(securityConfig.rateLimiter));
+}
+if (securityConfig.validation.enabled) {
+    app.use(validateRequests(securityConfig.validation));
+}
 
 // Importing handlers
 const loginHandler = require(`./strategies/login/${process.env.STRATEGY_LOGIN}/loginHandler`);
@@ -44,8 +60,11 @@ const resetPasswordHandler = require(`./strategies/reset-password/${process.env.
 // Defining routes
 app.post('/api/login', loginHandler);
 app.post('/api/register', registerHandler);
-app.get('/api/profile', profileHandler);
-app.post('/api/profile/update', upload.single('profileImage'), profileUpdateHandler);
+
+// Protect routes that require authentication
+app.get('/api/profile', authenticator(securityConfig.authentication.jwt), profileHandler);
+app.post('/api/profile/update', authenticator(securityConfig.authentication.jwt), upload.single('profileImage'), profileUpdateHandler);
+
 app.post('/api/forgot-password', forgotPasswordHandler);
 app.post('/api/reset-password', resetPasswordHandler);
 
