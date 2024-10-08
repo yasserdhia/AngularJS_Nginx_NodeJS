@@ -2,16 +2,19 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { environment } from '../environments/environment';
 
-// Import components based on their strategy folders
+// Import components for menu navigation
+import { HomeComponent } from './pages/home/home.component';
 import { LoginStrategy1Component } from './pages/login/strategy1/login-strategy1.component';
 import { RegisterStrategy1Component } from './pages/register/strategy1/register-strategy1.component';
 import { ProfileStrategy1Component } from './pages/profile/strategy1/profile-strategy1.component';
 import { ForgotPasswordStrategy1Component } from './pages/forgot-password/strategy1/forgot-password-strategy1.component';
 import { ResetPasswordStrategy1Component } from './pages/reset-password/strategy1/reset-password-strategy1.component';
+import { ProductsComponent } from './pages/products/products.component';
 
-// Define routes for different strategies
+// Define routes for different strategies and new components
 export const routes: Routes = [
-  { path: '', redirectTo: `login/${environment.strategyLogin}`, pathMatch: 'full' },
+  { path: '', redirectTo: `home`, pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   { path: `login/${environment.strategyLogin}`, component: LoginStrategy1Component },
   { path: `register/${environment.strategyRegister}`, component: RegisterStrategy1Component },
   
@@ -19,7 +22,8 @@ export const routes: Routes = [
   { path: `profile/${environment.strategyProfile}`, component: ProfileStrategy1Component, canActivate: [AuthGuard] },
   { path: `forgot-password/${environment.strategyForgotPassword}`, component: ForgotPasswordStrategy1Component },
   { path: `reset-password/${environment.strategyResetPassword}`, component: ResetPasswordStrategy1Component },
-  
-  // Wild-card route to redirect to login
-  { path: '**', redirectTo: `login/${environment.strategyLogin}` }
+  { path: 'products', component: ProductsComponent },
+
+  // Wild-card route to redirect to home
+  { path: '**', redirectTo: `home` }
 ];
