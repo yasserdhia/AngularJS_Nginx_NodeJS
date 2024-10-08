@@ -1,23 +1,33 @@
 .navbar {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #f8f9fa;
-  }
-  
-  .nav-link {
-    color: #f8f9fa;
-    transition: color 0.3s ease-in-out;
-  }
-  
-  .nav-link:hover {
-    color: #ffc107;
-  }
-  
-  .navbar-dark .navbar-toggler {
-    border-color: #f8f9fa;
-  }
-  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #ffc107;
+}
+
+.nav-link {
+  color: #f8f9fa;
+  font-size: 1.1rem;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #ffc107;
+}
+
+.navbar-dark .navbar-toggler {
+  border-color: #f8f9fa;
+}
+
+/* إضافة مساحة للمحتوى لتجنب تداخله مع الـ navbar */
+body {
+  padding-top: 56px;
+}
