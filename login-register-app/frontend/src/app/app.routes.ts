@@ -10,6 +10,8 @@ import { ProfileStrategy1Component } from './pages/profile/strategy1/profile-str
 import { ForgotPasswordStrategy1Component } from './pages/forgot-password/strategy1/forgot-password-strategy1.component';
 import { ResetPasswordStrategy1Component } from './pages/reset-password/strategy1/reset-password-strategy1.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { UsersComponent } from './pages/users/users.component'; // استيراد مكون صفحة المستخدمين
+
 
 // Define routes for different strategies and new components
 export const routes: Routes = [
@@ -23,7 +25,8 @@ export const routes: Routes = [
   { path: `forgot-password/${environment.strategyForgotPassword}`, component: ForgotPasswordStrategy1Component },
   { path: `reset-password/${environment.strategyResetPassword}`, component: ResetPasswordStrategy1Component },
   { path: 'products', component: ProductsComponent },
-
+  { path: 'users', component: UsersComponent }, // إضافة مسار صفحة المستخدمين
+  
   // Wild-card route to redirect to home
   { path: '**', redirectTo: `home` }
 ];

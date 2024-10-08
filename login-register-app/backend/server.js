@@ -56,6 +56,7 @@ const profileHandler = require(`./strategies/profile/${process.env.STRATEGY_PROF
 const profileUpdateHandler = require(`./strategies/profile/${process.env.STRATEGY_PROFILE}/profileUpdateHandler`);
 const forgotPasswordHandler = require(`./strategies/forgot-password/${process.env.STRATEGY_FORGOT_PASSWORD}/forgotPasswordHandler`);
 const resetPasswordHandler = require(`./strategies/reset-password/${process.env.STRATEGY_RESET_PASSWORD}/resetPasswordHandler`);
+const getUsersHandler = require(`./strategies/users/getUsersHandler`);
 
 // Defining routes
 app.post('/api/login', loginHandler);
@@ -67,6 +68,8 @@ app.post('/api/profile/update', authenticator(securityConfig.authentication.jwt)
 
 app.post('/api/forgot-password', forgotPasswordHandler);
 app.post('/api/reset-password', resetPasswordHandler);
+
+app.get('/api/users', getUsersHandler); // إضافة توجيه للـ API الجديد
 
 // Start the server
 const PORT = process.env.PORT || 3000;
