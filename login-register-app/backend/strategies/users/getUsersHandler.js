@@ -7,6 +7,19 @@ module.exports = (req, res) => {
             console.error('Error fetching users:', err);
             return res.status(500).json({ error: 'Error fetching users', details: err });
         }
-        res.status(200).json(results);
+
+        // تعديل مسار الصورة إذا كانت موجودة
+        const updatedResults = results.map(user => {
+            if (user.profile_image) {
+                // إضافة المسار الكامل للصور المرفوعة
+                user.profile_image = `http://localhost:3000/uploads/${user.profile_image}`;
+            } else {
+                // يمكنك ترك الحقل فارغًا أو تعيين صورة افتراضية هنا
+                user.profile_image = null;
+            }
+            return user;
+        });
+
+        res.status(200).json(updatedResults);
     });
 };
