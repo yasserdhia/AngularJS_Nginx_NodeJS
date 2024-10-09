@@ -1,0 +1,30 @@
+<div class="manage-products-container">
+    <h2>إدارة المنتجات</h2>
+  
+    <div class="add-product-form">
+      <h3>إضافة منتج جديد</h3>
+      <form (ngSubmit)="addProduct()">
+        <label for="title">عنوان المنتج:</label>
+        <input type="text" id="title" [(ngModel)]="newProduct.title" name="title" required>
+  
+        <label for="price">السعر:</label>
+        <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required>
+  
+        <label for="image">صورة المنتج:</label>
+        <input type="file" id="image" (change)="onFileChange($event)" name="image">
+  
+        <button type="submit" class="btn btn-primary">إضافة المنتج</button>
+      </form>
+    </div>
+  
+    <div class="product-list">
+      <h3>قائمة المنتجات</h3>
+      <div *ngFor="let product of products" class="product-card">
+        <img [src]="product.image || 'assets/default-product.png'" alt="Product Image">
+        <h4>{{ product.title }}</h4>
+        <p>السعر: {{ product.price }}$</p>
+        <button (click)="deleteProduct(product.id)" class="btn btn-danger">حذف المنتج</button>
+      </div>
+    </div>
+  </div>
+  

@@ -57,6 +57,24 @@ const profileUpdateHandler = require(`./strategies/profile/${process.env.STRATEG
 const forgotPasswordHandler = require(`./strategies/forgot-password/${process.env.STRATEGY_FORGOT_PASSWORD}/forgotPasswordHandler`);
 const resetPasswordHandler = require(`./strategies/reset-password/${process.env.STRATEGY_RESET_PASSWORD}/resetPasswordHandler`);
 const getUsersHandler = require(`./strategies/users/getUsersHandler`);
+const addUserHandler = require('./strategies/users/addUserHandler');
+const editUserHandler = require('./strategies/users/editUserHandler');
+const deleteUserHandler = require('./strategies/users/deleteUserHandler');
+const addProductHandler = require('./strategies/products/addProductHandler');
+const editProductHandler = require('./strategies/products/editProductHandler');
+const deleteProductHandler = require('./strategies/products/deleteProductHandler');
+const getProductsHandler = require(`./strategies/products/getProductsHandler`);
+
+
+// مسارات المستخدمين
+app.post('/api/users/add', addUserHandler);
+app.put('/api/users/edit/:id', editUserHandler);
+app.delete('/api/users/delete/:id', deleteUserHandler);
+
+// مسارات المنتجات
+app.post('/api/products/add', addProductHandler);
+app.put('/api/products/edit/:id', editProductHandler);
+app.delete('/api/products/delete/:id', deleteProductHandler);
 
 // Defining routes
 app.post('/api/login', loginHandler);
@@ -70,6 +88,12 @@ app.post('/api/forgot-password', forgotPasswordHandler);
 app.post('/api/reset-password', resetPasswordHandler);
 
 app.get('/api/users', getUsersHandler); // إضافة توجيه للـ API الجديد
+
+// المنتجات
+app.get('/api/products', getProductsHandler); // تم التعديل هنا
+app.post('/api/products', upload.single('image'), addProductHandler); // تم التعديل هنا
+app.delete('/api/products/:id', deleteProductHandler); // تم التعديل هنا
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

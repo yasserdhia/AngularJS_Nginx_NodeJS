@@ -1,0 +1,39 @@
+<div class="admin-container">
+  <h1>Admin Panel</h1>
+
+  <!-- قسم التحكم بالمستخدمين -->
+  <div class="users-section">
+    <h2>Users</h2>
+    <button class="btn btn-primary" (click)="addUser()">Add User</button>
+    <div *ngIf="users?.length > 0; else noUsers">
+      <div *ngFor="let user of users" class="user-card">
+        <img [src]="user.profile_image || 'assets/default-profile.png'" alt="User Image">
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.email }}</p>
+        <button class="btn btn-warning" (click)="editUser(user)">Edit</button>
+        <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
+      </div>
+    </div>
+    <ng-template #noUsers>
+      <p>No users available.</p>
+    </ng-template>
+  </div>
+
+  <!-- قسم التحكم بالمنتجات -->
+  <div class="products-section">
+    <h2>Products</h2>
+    <button class="btn btn-primary" (click)="addProduct()">Add Product</button>
+    <div *ngIf="products?.length > 0; else noProducts">
+      <div *ngFor="let product of products" class="product-card">
+        <img [src]="product.imageUrl || 'assets/default-product.png'" alt="{{ product.title }}">
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.price }} USD</p>
+        <button class="btn btn-warning" (click)="editProduct(product)">Edit</button>
+        <button class="btn btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+      </div>
+    </div>
+    <ng-template #noProducts>
+      <p>No products available.</p>
+    </ng-template>
+  </div>
+</div>
