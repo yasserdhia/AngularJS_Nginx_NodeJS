@@ -4,36 +4,31 @@
   <!-- قسم التحكم بالمستخدمين -->
   <div class="users-section">
     <h2>Users</h2>
-    <button class="btn btn-primary" (click)="addUser()">Add User</button>
-    <div *ngIf="users?.length > 0; else noUsers">
+    <button class="btn btn-primary" (click)="showAddUserForm()">Add User</button>
+
+    <div *ngIf="showUserForm" class="user-form">
+      <input type="text" [(ngModel)]="userForm.name" placeholder="Name" class="form-control" required>
+      <input type="email" [(ngModel)]="userForm.email" placeholder="Email" class="form-control" required>
+      <input type="password" [(ngModel)]="userForm.password" placeholder="Password" class="form-control" [disabled]="editMode">
+      <input type="file" (change)="onFileChange($event)" class="form-control">
+      <button class="btn btn-success" (click)="editMode ? updateUser() : saveUser()">
+        {{ editMode ? 'Update User' : 'Add User' }}
+      </button>
+      <button class="btn btn-secondary" (click)="cancelUserForm()">Cancel</button>
+    </div>
+
+    <div *ngIf="(users && users.length > 0); else noUsers">
       <div *ngFor="let user of users" class="user-card">
-        <img [src]="user.profile_image || 'assets/default-profile.png'" alt="User Image">
-        <h3>{{ user.name }}</h3>
-        <p>{{ user.email }}</p>
-        <button class="btn btn-warning" (click)="editUser(user)">Edit</button>
+        <img [src]="user?.profile_image || 'assets/default-profile.png'" alt="User Image" class="user-image">
+        <h3>{{ user?.name }}</h3>
+        <p>{{ user?.email }}</p>
+        <button class="btn btn-warning" (click)="showEditUserForm(user)">Edit</button>
         <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
       </div>
     </div>
+
     <ng-template #noUsers>
       <p>No users available.</p>
-    </ng-template>
-  </div>
-
-  <!-- قسم التحكم بالمنتجات -->
-  <div class="products-section">
-    <h2>Products</h2>
-    <button class="btn btn-primary" (click)="addProduct()">Add Product</button>
-    <div *ngIf="products?.length > 0; else noProducts">
-      <div *ngFor="let product of products" class="product-card">
-        <img [src]="product.imageUrl || 'assets/default-product.png'" alt="{{ product.title }}">
-        <h3>{{ product.title }}</h3>
-        <p>{{ product.price }} USD</p>
-        <button class="btn btn-warning" (click)="editProduct(product)">Edit</button>
-        <button class="btn btn-danger" (click)="deleteProduct(product.id)">Delete</button>
-      </div>
-    </div>
-    <ng-template #noProducts>
-      <p>No products available.</p>
     </ng-template>
   </div>
 </div>

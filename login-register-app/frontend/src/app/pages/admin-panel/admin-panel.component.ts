@@ -1,20 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.css']
+  styleUrls: ['./admin-panel.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
 })
 export class AdminPanelComponent implements OnInit {
   users: any[] = [];
-  products: any[] = [];
+  showUserForm = false;
+  editMode = false;
+  userForm = {
+    id: null,
+    name: '',
+    email: '',
+    password: '',
+    profile_image: null
+  };
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.getUsers();
-    this.getProducts();
   }
 
   getUsers() {
@@ -23,19 +34,74 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
-  getProducts() {
-    this.http.get('/api/products').subscribe((data: any) => {
-      this.products = data;
+  showAddUserForm() {
+    this.resetUserForm();
+    this.showUserForm = true;
+    this.editMode = false;
+  }
+
+  showEditUserForm(user: any) {
+    this.userForm = { ...user };
+    this.showUserForm = true;
+    this.editMode = true;
+  }
+
+  saveUser() {
+    const formData = new FormData();
+    formData.append('name', this.userForm.name);
+    formData.append('email', this.userForm.email);
+    formData.append('password', this.userForm.password);
+
+    if (this.userForm.profile_image) {
+      formData.append('profile_image', this.userForm.profile_image);
+    }
+
+    this.http.post('/api/users/add', formData).subscribe(() => {
+      this.getUsers();
+      this.showUserForm = false;
     });
   }
 
-  // وظائف لإضافة، تعديل، حذف المستخدمين
-  addUser() { /* Function to add a user */ }
-  editUser(user: any) { /* Function to edit a user */ }
-  deleteUser(userId: number) { /* Function to delete a user */ }
+  updateUser() {
+    const formData = new FormData();
+    formData.append('name', this.userForm.name);
+    formData.append('email', this.userForm.email);
 
-  // وظائف لإضافة، تعديل، حذف المنتجات
-  addProduct() { /* Function to add a product */ }
-  editProduct(product: any) { /* Function to edit a product */ }
-  deleteProduct(productId: number) { /* Function to delete a product */ }
+    if (this.userForm.profile_image) {
+      formData.append('profile_image', this.userForm.profile_image);
+    }
+
+    this.http.put(`/api/users/edit/${this.userForm.id}`, formData).subscribe(() => {
+      this.getUsers();
+      this.showUserForm = false;
+    });
+  }
+
+  deleteUser(userId: number) {
+    this.http.delete(`/api/users/delete/${userId}`).subscribe(() => {
+      this.getUsers();
+    });
+  }
+
+  cancelUserForm() {
+    this.resetUserForm();
+    this.showUserForm = false;
+  }
+
+  resetUserForm() {
+    this.userForm = {
+      id: null,
+      name: '',
+      email: '',
+      password: '',
+      profile_image: null
+    };
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.userForm.profile_image = file;
+    }
+  }
 }
