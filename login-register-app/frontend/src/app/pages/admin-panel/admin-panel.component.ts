@@ -36,7 +36,7 @@ export class AdminPanelComponent implements OnInit {
 
   showAddUserForm() {
     this.resetUserForm();
-    this.showUserForm = true;
+    this.showUserForm = !this.showUserForm; // التحكم في عرض النموذج باستخدام *ngIf
     this.editMode = false;
   }
 
