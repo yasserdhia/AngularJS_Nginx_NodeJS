@@ -10,7 +10,7 @@ import { ProfileStrategy1Component } from './pages/profile/strategy1/profile-str
 import { ForgotPasswordStrategy1Component } from './pages/forgot-password/strategy1/forgot-password-strategy1.component';
 import { ResetPasswordStrategy1Component } from './pages/reset-password/strategy1/reset-password-strategy1.component';
 import { ProductsComponent } from './pages/products/products.component';
-import { UsersComponent } from './pages/users/users.component'; // استيراد مكون صفحة المستخدمين
+import { UsersComponent } from './pages/users/users.component';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
 import { ManageProductsComponent } from './pages/manage-products/manage-products.component';
 
@@ -26,10 +26,10 @@ export const routes: Routes = [
   { path: `forgot-password/${environment.strategyForgotPassword}`, component: ForgotPasswordStrategy1Component },
   { path: `reset-password/${environment.strategyResetPassword}`, component: ResetPasswordStrategy1Component },
   { path: 'products', component: ProductsComponent },
-  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] }, // إضافة AuthGuard لحماية صفحة المستخدمين
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
   { path: 'admin/products', component: ManageProductsComponent, canActivate: [AuthGuard] },
   
   // Wild-card route to redirect to home
-  { path: '**', redirectTo: `home` }
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
