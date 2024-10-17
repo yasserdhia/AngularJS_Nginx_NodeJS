@@ -11,7 +11,7 @@ const app = express();
 app.set('trust proxy', 1); // أو true حسب الحاجة
 
 // Enabling CORS
-const allowedOrigins = ['https://localhost'];
+const allowedOrigins = ['https://localhost', 'http://localhost:4200'];
 app.use(cors({
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -21,6 +21,7 @@ app.use(cors({
 
 // Enabling body-parser to parse JSON requests
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from 'uploads' directory for profile images
 app.use('/uploads', express.static('uploads'));
@@ -83,9 +84,9 @@ function validateProductData(req, res, next) {
     next();
 }
 
-// مسارات المستخدمين
-app.post('/api/users/add', validateUserData, addUserHandler);
-app.put('/api/users/edit/:id', validateUserData, editUserHandler);
+// مسارات المستخدمين مع multer لمعالجة ملفات profile_image
+app.post('/api/users/add', upload.single('profile_image'), validateUserData, addUserHandler);
+app.put('/api/users/edit/:id', upload.single('profile_image'), validateUserData, editUserHandler);
 app.delete('/api/users/delete/:id', deleteUserHandler);
 
 // مسارات المنتجات
@@ -104,12 +105,10 @@ app.post('/api/profile/update', authenticator(securityConfig.authentication.jwt)
 app.post('/api/forgot-password', forgotPasswordHandler);
 app.post('/api/reset-password', resetPasswordHandler);
 
-app.get('/api/users', getUsersHandler); // إضافة توجيه للـ API الجديد
+app.get('/api/users', getUsersHandler);
 
 // المنتجات
 app.get('/api/products', getProductsHandler);
-app.post('/api/products', upload.single('image'), validateProductData, addProductHandler);
-app.delete('/api/products/:id', deleteProductHandler);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

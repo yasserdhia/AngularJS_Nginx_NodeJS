@@ -3,7 +3,10 @@ const db = require('../../dbConnection');
 module.exports = (req, res) => {
   const { id } = req.params;
   const { name, email } = req.body;
-  let { profile_image } = req.body;
+  let profile_image = req.file ? req.file.filename : req.body.profile_image; // التعامل مع الملف من req.file
+
+  // طباعة البيانات المستلمة لتتبع الأخطاء
+  console.log('Received data:', { id, name, email, profile_image });
 
   // التحقق من وجود الحقول المطلوبة
   if (!name || !email) {

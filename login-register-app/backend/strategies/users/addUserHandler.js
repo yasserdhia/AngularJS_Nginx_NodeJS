@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt');
 const db = require('../../dbConnection');
 
 module.exports = (req, res) => {
-  const { name, email, password, profile_image } = req.body;
+  const { name, email, password } = req.body;
+  const profile_image = req.file ? req.file.filename : null; // التعامل مع ملف الصورة
+
+  // طباعة البيانات المستلمة لتتبع الأخطاء
+  console.log('Received data:', { name, email, password, profile_image });
 
   // التحقق من وجود جميع الحقول المطلوبة
   if (!name || !email || !password) {
