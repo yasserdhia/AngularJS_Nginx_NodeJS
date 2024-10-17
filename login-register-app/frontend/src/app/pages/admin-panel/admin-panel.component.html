@@ -4,26 +4,26 @@
   <!-- قسم التحكم بالمستخدمين -->
   <div class="users-section">
     <h2>Users</h2>
-    <button class="btn btn-primary" (click)="showAddUserForm()">Add User</button>
+    <button class="btn btn-primary add-user-btn" (click)="showAddUserForm()">Add User</button>
 
     <div *ngIf="showUserForm" class="user-form">
       <input type="text" [(ngModel)]="userForm.name" placeholder="Name" class="form-control" required>
       <input type="email" [(ngModel)]="userForm.email" placeholder="Email" class="form-control" required>
       <input type="password" [(ngModel)]="userForm.password" placeholder="Password" class="form-control" [disabled]="editMode">
       <input type="file" (change)="onFileChange($event)" class="form-control">
-      <button class="btn btn-success" (click)="editMode ? updateUser() : saveUser()">
+      <button class="btn btn-success save-btn" (click)="editMode ? updateUser() : saveUser()">
         {{ editMode ? 'Update User' : 'Add User' }}
       </button>
-      <button class="btn btn-secondary" (click)="cancelUserForm()">Cancel</button>
+      <button class="btn btn-secondary cancel-btn" (click)="cancelUserForm()">Cancel</button>
     </div>
 
-    <div *ngIf="(users && users.length > 0); else noUsers">
+    <div *ngIf="(users && users.length > 0); else noUsers" class="users-grid">
       <div *ngFor="let user of users" class="user-card">
         <img [src]="user?.profile_image || 'assets/default-profile.png'" alt="User Image" class="user-image">
         <h3>{{ user?.name }}</h3>
         <p>{{ user?.email }}</p>
-        <button class="btn btn-warning" (click)="showEditUserForm(user)">Edit</button>
-        <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
+        <button class="btn btn-warning edit-btn" (click)="showEditUserForm(user)">Edit</button>
+        <button class="btn btn-danger delete-btn" (click)="deleteUser(user.id)">Delete</button>
       </div>
     </div>
 

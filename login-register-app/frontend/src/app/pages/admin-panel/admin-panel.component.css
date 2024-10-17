@@ -1,35 +1,140 @@
+/* تصميم الصفحة العامة */
 .admin-container {
-    padding: 20px;
-  }
-  
-  .users-section, .products-section {
-    margin-bottom: 40px;
-  }
-  
-  .user-card, .product-card {
-    display: flex;
-    flex-direction: column;
+  margin-top: 800px; /* زيادة المسافة لتجنب التداخل مع الـ Navbar */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* لضبط النصوص والصور في المنتصف */
+  max-width: 1200px; /* تحديد عرض الصفحة */
+  margin-left: auto;
+  margin-right: auto; /* لجعل الصفحة في وسط الشاشة */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* تصميم قسم المستخدمين */
+.users-section {
+  margin-top: 40px;
+}
+
+.add-user-btn {
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-user-btn:hover {
+  background-color: #0056b3;
+}
+
+/* جعل البطاقات وسط الصفحة وعرضها بشكل أفقي */
+.users-grid {
+  display: flex;
+  justify-content: center; /* محاذاة البطاقات إلى المنتصف */
+  gap: 20px; /* المسافة بين البطاقات */
+  flex-wrap: wrap; /* لجعل البطاقات تنتقل لسطر جديد إذا ضاق العرض */
+}
+
+.user-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  width: 250px; /* تحديد عرض ثابت لكل بطاقة */
+  transition: transform 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-10px); /* تأثير الرفع عند التحويم */
+}
+
+.user-card img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #007bff; /* إضافة حد حول الصورة */
+}
+
+.user-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.user-card p {
+  color: #555;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+/* تصميم الأزرار */
+.save-btn, .cancel-btn, .edit-btn, .delete-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  width: 100%;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+.edit-btn {
+  background-color: #ffc107;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #e0a800;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* تحسين تجاوب التصميم */
+@media (max-width: 768px) {
+  .users-grid {
+    flex-direction: column; /* تحويل البطاقات إلى عمودي في الشاشات الصغيرة */
     align-items: center;
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
   }
-  
-  img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-  }
-  
-  button {
-    margin: 5px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-  }
-  
+}
