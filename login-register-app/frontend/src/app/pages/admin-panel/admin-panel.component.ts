@@ -41,7 +41,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   showEditUserForm(user: any) {
-    this.userForm = { ...user };
+    this.userForm = { ...user, password: '' }; // تعيين كلمة المرور كفارغة عند التحديث
     this.showUserForm = true;
     this.editMode = true;
   }
@@ -56,10 +56,15 @@ export class AdminPanelComponent implements OnInit {
       formData.append('profile_image', this.userForm.profile_image);
     }
 
-    this.http.post('/api/users/add', formData).subscribe(() => {
-      this.getUsers();
-      this.showUserForm = false;
-    });
+    this.http.post('/api/users/add', formData).subscribe(
+      () => {
+        this.getUsers();
+        this.showUserForm = false;
+      },
+      (error) => {
+        console.error('Error adding user:', error);
+      }
+    );
   }
 
   updateUser() {
@@ -71,16 +76,26 @@ export class AdminPanelComponent implements OnInit {
       formData.append('profile_image', this.userForm.profile_image);
     }
 
-    this.http.put(`/api/users/edit/${this.userForm.id}`, formData).subscribe(() => {
-      this.getUsers();
-      this.showUserForm = false;
-    });
+    this.http.put(`/api/users/edit/${this.userForm.id}`, formData).subscribe(
+      () => {
+        this.getUsers();
+        this.showUserForm = false;
+      },
+      (error) => {
+        console.error('Error updating user:', error);
+      }
+    );
   }
 
   deleteUser(userId: number) {
-    this.http.delete(`/api/users/delete/${userId}`).subscribe(() => {
-      this.getUsers();
-    });
+    this.http.delete(`/api/users/delete/${userId}`).subscribe(
+      () => {
+        this.getUsers();
+      },
+      (error) => {
+        console.error('Error deleting user:', error);
+      }
+    );
   }
 
   cancelUserForm() {

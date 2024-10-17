@@ -65,15 +65,32 @@ const editProductHandler = require('./strategies/products/editProductHandler');
 const deleteProductHandler = require('./strategies/products/deleteProductHandler');
 const getProductsHandler = require(`./strategies/products/getProductsHandler`);
 
+// Middleware to validate user data before adding or editing
+function validateUserData(req, res, next) {
+    const { name, email, password } = req.body;
+    if (!name || !email || (req.method === 'POST' && !password)) {
+        return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+    next();
+}
+
+// Middleware to validate product data before adding or editing
+function validateProductData(req, res, next) {
+    const { title, price } = req.body;
+    if (!title || !price) {
+        return res.status(400).json({ error: 'Title and price are required' });
+    }
+    next();
+}
 
 // مسارات المستخدمين
-app.post('/api/users/add', addUserHandler);
-app.put('/api/users/edit/:id', editUserHandler);
+app.post('/api/users/add', validateUserData, addUserHandler);
+app.put('/api/users/edit/:id', validateUserData, editUserHandler);
 app.delete('/api/users/delete/:id', deleteUserHandler);
 
 // مسارات المنتجات
-app.post('/api/products/add', addProductHandler);
-app.put('/api/products/edit/:id', editProductHandler);
+app.post('/api/products/add', upload.single('image'), validateProductData, addProductHandler);
+app.put('/api/products/edit/:id', upload.single('image'), validateProductData, editProductHandler);
 app.delete('/api/products/delete/:id', deleteProductHandler);
 
 // Defining routes
@@ -90,10 +107,9 @@ app.post('/api/reset-password', resetPasswordHandler);
 app.get('/api/users', getUsersHandler); // إضافة توجيه للـ API الجديد
 
 // المنتجات
-app.get('/api/products', getProductsHandler); // تم التعديل هنا
-app.post('/api/products', upload.single('image'), addProductHandler); // تم التعديل هنا
-app.delete('/api/products/:id', deleteProductHandler); // تم التعديل هنا
-
+app.get('/api/products', getProductsHandler);
+app.post('/api/products', upload.single('image'), validateProductData, addProductHandler);
+app.delete('/api/products/:id', deleteProductHandler);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
