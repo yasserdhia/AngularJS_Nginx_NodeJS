@@ -1,38 +1,53 @@
 <div class="admin-container">
   <h1>Admin Panel</h1>
 
-  <!-- قسم التحكم بالمستخدمين -->
+  <!-- قسم المستخدمين -->
   <div class="users-section">
-    <h2>Users</h2>
-    <button class="btn btn-primary add-user-btn" (click)="showAddUserForm()">
-      {{ showUserForm ? 'Hide Form' : 'Add User' }}
-    </button>
-
-    <!-- نموذج إضافة المستخدم -->
-    <div *ngIf="showUserForm" class="user-form">
-      <input type="text" [(ngModel)]="userForm.name" placeholder="Name" class="form-control" required>
-      <input type="email" [(ngModel)]="userForm.email" placeholder="Email" class="form-control" required>
-      <input type="password" [(ngModel)]="userForm.password" placeholder="Password" class="form-control" [disabled]="editMode">
-      <input type="file" (change)="onFileChange($event)" class="form-control">
-      <button class="btn btn-success" (click)="editMode ? updateUser() : saveUser()">
-        {{ editMode ? 'Update User' : 'Add User' }}
-      </button>
-      <button class="btn btn-secondary" (click)="cancelUserForm()">Cancel</button>
-    </div>
+    <button class="btn btn-primary" (click)="showAddUserForm(userModal)">Add User</button>
 
     <!-- عرض المستخدمين -->
-    <div *ngIf="(users && users.length > 0); else noUsers" class="users-grid">
+    <div *ngIf="users && users.length > 0" class="users-grid">
       <div *ngFor="let user of users" class="user-card">
-        <img [src]="user?.profile_image || 'assets/default-profile.png'" alt="User Image" class="user-image">
-        <h3>{{ user?.name }}</h3>
-        <p>{{ user?.email }}</p>
-        <button class="btn btn-warning edit-btn" (click)="showEditUserForm(user)">Edit</button>
-        <button class="btn btn-danger delete-btn" (click)="deleteUser(user.id)">Delete</button>
+        <img [src]="user.profile_image || 'assets/default-profile.png'" alt="User Image">
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.email }}</p>
+        <button class="btn btn-warning" (click)="showEditUserForm(user, userModal)">Edit</button>
+        <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
       </div>
     </div>
-
-    <ng-template #noUsers>
-      <p>No users available.</p>
-    </ng-template>
   </div>
+
+  <!-- النافذة المنبثقة (Modal) -->
+  <ng-template #userModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ editMode ? 'Edit User' : 'Add User' }}</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <label for="userName" class="form-label">Name</label>
+          <input type="text" [(ngModel)]="userForm.name" class="form-control" id="userName" placeholder="Enter name">
+        </div>
+        <div class="mb-3">
+          <label for="userEmail" class="form-label">Email</label>
+          <input type="email" [(ngModel)]="userForm.email" class="form-control" id="userEmail" placeholder="Enter email">
+        </div>
+        <div class="mb-3" *ngIf="!editMode">
+          <label for="userPassword" class="form-label">Password</label>
+          <input type="password" [(ngModel)]="userForm.password" class="form-control" id="userPassword" placeholder="Enter password">
+        </div>
+        <div class="mb-3">
+          <label for="userProfileImage" class="form-label">Profile Image</label>
+          <input type="file" (change)="onFileChange($event)" class="form-control" id="userProfileImage">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
+      <button type="button" class="btn btn-primary" (click)="editMode ? updateUser() : saveUser()">
+        {{ editMode ? 'Update User' : 'Add User' }}
+      </button>
+    </div>
+  </ng-template>
 </div>

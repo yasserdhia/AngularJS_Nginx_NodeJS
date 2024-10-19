@@ -5,9 +5,17 @@ FROM node:22.5.1 AS frontend-builder
 
 WORKDIR /app
 COPY ./frontend/package*.json ./
+
+# تثبيت Angular CLI
 RUN npm install -g @angular/cli@latest
-RUN npm install
+
+# تثبيت الحزم مع استخدام --legacy-peer-deps لتجنب مشاكل التوافق
+RUN npm install --legacy-peer-deps
+
+# نسخ باقي ملفات المشروع
 COPY ./frontend .
+
+# بناء المشروع باستخدام Angular CLI
 RUN ng build --output-path=dist/browser
 
 # المرحلة الثانية: التقديم باستخدام Nginx
@@ -18,7 +26,7 @@ RUN rm -rf /usr/share/nginx/html/*
 
 WORKDIR /usr/share/nginx/html
 
-# نسخ ملفات البناء مباشرة إلى مجلد Nginx
+# نسخ ملفات البناء إلى مجلد Nginx
 COPY --from=frontend-builder /app/dist/browser/* /usr/share/nginx/html/
 
 # نسخ الشهادات إلى مجلد Nginx
@@ -27,5 +35,8 @@ COPY ./certs /etc/nginx/certs/
 # نسخ إعدادات Nginx المخصصة
 COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
+# فتح منفذ 443 لتأمين الوصول
 EXPOSE 443
+
+# بدء خادم Nginx
 CMD ["nginx", "-g", "daemon off;"]

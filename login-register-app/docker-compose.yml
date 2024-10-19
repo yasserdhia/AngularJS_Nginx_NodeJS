@@ -34,10 +34,8 @@ services:
       - "443:443"
     depends_on:
       - backend
-    # إزالة الـ Volumes لتجنب استبدال ملفات البناء
-    # volumes:
-    #   - ./frontend:/app
-    #   - /app/node_modules
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=4096" # لحل مشاكل الذاكرة المحتملة أثناء البناء
     networks:
       - app-network
 
