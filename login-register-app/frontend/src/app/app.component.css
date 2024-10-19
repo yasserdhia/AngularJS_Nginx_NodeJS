@@ -1,0 +1,5 @@
+:host {
+    display: block;
+    padding-top: 80px; /* المسافة المطلوبة لكي لا يتداخل المحتوى مع navbar */
+  }
+  

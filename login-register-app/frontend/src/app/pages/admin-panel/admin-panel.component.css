@@ -1,6 +1,5 @@
-/* تصميم الصفحة العامة */
 .admin-container {
-  margin-top: 100px;
+  margin-top: 500px; /* نفس ارتفاع الـ navbar */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
@@ -11,6 +10,7 @@
   margin-right: auto;
 }
 
+
 /* نموذج إضافة المستخدم */
 .user-form {
   margin-top: 20px;
@@ -18,7 +18,6 @@
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
 }
 
 .user-form.show {
@@ -62,6 +61,7 @@
   padding: 20px;
   text-align: center;
   width: 250px;
+  margin-top: 16px;
   transition: transform 0.3s ease;
 }
 

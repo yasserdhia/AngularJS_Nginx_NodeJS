@@ -1,54 +1,31 @@
-/* تصميم الـ Navbar */
 .navbar {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: fixed;
+  position: fixed; /* لجعل الـ navbar ثابتة في أعلى الصفحة */
   top: 0;
   left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: #343a40; /* لون الخلفية الداكنة للـ Navbar */
-  height: 60px; /* ارتفاع الـ Navbar */
+  width: 100%; /* لجعل الـ navbar تمتد بعرض الصفحة */
+  z-index: 9999; /* للتأكد من أنها تكون أعلى من جميع المحتويات الأخرى */
+  background-color: #343a40; /* لون خلفية الـ navbar */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* إضافة ظل */
 }
 
-/* العلامة التجارية في الـ Navbar */
 .navbar-brand {
   font-size: 1.75rem;
   font-weight: bold;
   color: #ffc107;
 }
 
-/* تصميم الروابط في الـ Navbar */
 .nav-link {
   color: #f8f9fa;
   font-size: 1.1rem;
-  padding: 8px 15px;
+  transition: color 0.3s ease-in-out;
 }
 
 .nav-link:hover {
   color: #ffc107;
 }
 
-/* جعل القائمة الرئيسية تنجذب إلى اليسار */
-.navbar-nav {
-  margin-left: 0;
-}
-
-/* إضافة مسافة أسفل الـ Navbar لمنع التداخل مع باقي الصفحة */
 body {
-  padding-top: 70px; /* لضمان وجود مساحة أسفل الـ Navbar */
-}
-
-/* تحسين التصميم في الشاشات الصغيرة */
-@media (max-width: 768px) {
-  .navbar {
-    height: 50px; /* تقليل ارتفاع الـ Navbar في الشاشات الصغيرة */
-  }
-
-  .navbar-brand {
-    font-size: 1.5rem;
-  }
-
-  body {
-    padding-top: 60px; /* تعديل المسافة في الشاشات الصغيرة */
-  }
+  padding-top: 80px; /* يجب ضبط هذا بناءً على ارتفاع الـ navbar */
+  margin: 0;
+  box-sizing: border-box;
 }
