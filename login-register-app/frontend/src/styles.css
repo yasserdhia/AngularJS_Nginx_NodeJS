@@ -88,3 +88,33 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* Modal styles */
+.modal-dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 600px;
+  width: 100%;
+  z-index: 1050; /* فوق جميع العناصر */
+  margin-top: 70px;
+}
+
+/* Ensure the modal is above everything */
+.modal-backdrop {
+  z-index: 1040; /* تحت الـ modal-content */
+}
+
+/* Adjust the navbar z-index */
+.navbar {
+  z-index: 1000;
+}

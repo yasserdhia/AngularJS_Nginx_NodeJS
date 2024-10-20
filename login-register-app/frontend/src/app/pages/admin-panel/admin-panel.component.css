@@ -1,5 +1,5 @@
 .admin-container {
-  margin-top: 500px; /* نفس ارتفاع الـ navbar */
+  margin-top: 500px; /* تجنب التداخل مع الـ navbar */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
@@ -97,8 +97,4 @@
     flex-direction: column;
     align-items: center;
   }
-}
-
-.modal-content {
-  padding: 20px;
 }
