@@ -18,36 +18,42 @@
   </div>
 
   <!-- النافذة المنبثقة (Modal) -->
-  <ng-template #userModal let-modal style="margin-top: 100px;">
-    <div class="modal-header">
-      <h5 class="modal-title">{{ editMode ? 'Edit User' : 'Add User' }}</h5>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <form>
-        <div class="mb-3">
-          <label for="userName" class="form-label">Name</label>
-          <input type="text" [(ngModel)]="userForm.name" class="form-control" id="userName" placeholder="Enter name">
+  <ng-template #userModal let-modal>
+    <div class="modal-dialog modal-dialog-centered"> <!-- تعديل هنا -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editMode ? 'Edit User' : 'Add User' }}</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
         </div>
-        <div class="mb-3">
-          <label for="userEmail" class="form-label">Email</label>
-          <input type="email" [(ngModel)]="userForm.email" class="form-control" id="userEmail" placeholder="Enter email">
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="userName" class="form-label">Name</label>
+              <input type="text" [(ngModel)]="userForm.name" class="form-control" id="userName" placeholder="Enter name">
+            </div>
+            <div class="mb-3">
+              <label for="userEmail" class="form-label">Email</label>
+              <input type="email" [(ngModel)]="userForm.email" class="form-control" id="userEmail" placeholder="Enter email">
+            </div>
+            <div class="mb-3" *ngIf="!editMode">
+              <label for="userPassword" class="form-label">Password</label>
+              <input type="password" [(ngModel)]="userForm.password" class="form-control" id="userPassword" placeholder="Enter password">
+            </div>
+            <div class="mb-3">
+              <label for="userProfileImage" class="form-label">Profile Image</label>
+              <input type="file" (change)="onFileChange($event)" class="form-control" id="userProfileImage">
+            </div>
+          </form>
         </div>
-        <div class="mb-3" *ngIf="!editMode">
-          <label for="userPassword" class="form-label">Password</label>
-          <input type="password" [(ngModel)]="userForm.password" class="form-control" id="userPassword" placeholder="Enter password">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="editMode ? updateUser() : saveUser()">
+            {{ editMode ? 'Update User' : 'Add User' }}
+          </button>
         </div>
-        <div class="mb-3">
-          <label for="userProfileImage" class="form-label">Profile Image</label>
-          <input type="file" (change)="onFileChange($event)" class="form-control" id="userProfileImage">
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
-      <button type="button" class="btn btn-primary" (click)="editMode ? updateUser() : saveUser()">
-        {{ editMode ? 'Update User' : 'Add User' }}
-      </button>
+      </div>
     </div>
   </ng-template>
+  
+  
 </div>

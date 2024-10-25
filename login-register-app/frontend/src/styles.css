@@ -106,7 +106,6 @@ a:hover {
   max-width: 600px;
   width: 100%;
   z-index: 1050; /* فوق جميع العناصر */
-  margin-top: 70px;
 }
 
 /* Ensure the modal is above everything */
@@ -117,4 +116,103 @@ a:hover {
 /* Adjust the navbar z-index */
 .navbar {
   z-index: 1000;
+}
+
+/* Custom modal class for specific use */
+.custom-modal .modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 700px;
+  z-index: 1100;
+}
+
+/* Ensure the modal-backdrop for custom modal is behind it */
+.custom-modal .modal-backdrop {
+  z-index: 1040;
+}
+
+/* Styles for the Admin Panel */
+.admin-container {
+  margin-top: 500px; /* تجنب التداخل مع الـ navbar */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.users-section {
+  margin-top: 40px;
+}
+
+.add-user-btn {
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-user-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Users Grid */
+.users-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.user-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 250px;
+  margin-top: 16px;
+  transition: transform 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-10px);
+}
+
+.user-card img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #007bff;
+}
+
+.user-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.user-card p {
+  color: #555;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+/* تحسين تجاوب التصميم */
+@media (max-width: 768px) {
+  .users-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }
