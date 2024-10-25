@@ -134,7 +134,6 @@ a:hover {
 
 /* Styles for the Admin Panel */
 .admin-container {
-  margin-top: 500px; /* تجنب التداخل مع الـ navbar */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
