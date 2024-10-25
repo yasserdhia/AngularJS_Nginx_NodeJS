@@ -22,8 +22,6 @@ export class AdminPanelComponent implements OnInit {
     profile_image: null
   };
 
-  private scrollPosition = 0; // حفظ موضع التمرير
-
   constructor(private http: HttpClient, private modalService: NgbModal) {}
 
   ngOnInit(): void {
@@ -40,24 +38,14 @@ export class AdminPanelComponent implements OnInit {
   showAddUserForm(content: any) {
     this.resetUserForm();
     this.editMode = false;
-    this.scrollPosition = window.pageYOffset; // حفظ موضع التمرير
-    document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
-    this.modalService.open(content).result.finally(() => {
-      document.body.style.overflow = 'auto'; // استعادة التمرير عند إغلاق الـ modal
-      window.scrollTo(0, this.scrollPosition); // إعادة موضع التمرير
-    });
+    this.modalService.open(content);
   }
 
   // فتح النافذة المنبثقة لتعديل مستخدم
   showEditUserForm(user: any, content: any) {
     this.userForm = { ...user, password: '' };
     this.editMode = true;
-    this.scrollPosition = window.pageYOffset; // حفظ موضع التمرير
-    document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
-    this.modalService.open(content).result.finally(() => {
-      document.body.style.overflow = 'auto'; // استعادة التمرير عند إغلاق الـ modal
-      window.scrollTo(0, this.scrollPosition); // إعادة موضع التمرير
-    });
+    this.modalService.open(content);
   }
 
   // حفظ المستخدم الجديد
@@ -72,7 +60,6 @@ export class AdminPanelComponent implements OnInit {
 
     this.http.post('/api/users/add', formData).subscribe(() => {
       this.getUsers();
-      window.scrollTo(0, this.scrollPosition); // إرجاع موضع التمرير بعد الإضافة
       this.modalService.dismissAll(); // إغلاق النافذة المنبثقة
     });
   }
@@ -88,7 +75,6 @@ export class AdminPanelComponent implements OnInit {
 
     this.http.put(`/api/users/edit/${this.userForm.id}`, formData).subscribe(() => {
       this.getUsers();
-      window.scrollTo(0, this.scrollPosition); // إرجاع موضع التمرير بعد التعديل
       this.modalService.dismissAll(); // إغلاق النافذة المنبثقة
     });
   }
