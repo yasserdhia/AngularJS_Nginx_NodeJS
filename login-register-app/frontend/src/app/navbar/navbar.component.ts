@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
         // تعيين القيم الافتراضية للمستخدم الزائر
         this.user = {
           name: 'Guest',
-          profile_image: 'assets/default-profile.png'
+          profile_image: '/assets/default-avatar.png'
         };
       }
     });
@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit {
     // تعيين القيم الافتراضية بعد تسجيل الخروج
     this.user = {
       name: 'Guest',
-      profile_image: 'assets/default-profile.png'
+      profile_image: '/assets/default-avatar.png'
     };
   }
 }

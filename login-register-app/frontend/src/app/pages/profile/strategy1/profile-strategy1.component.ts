@@ -39,7 +39,7 @@ export class ProfileStrategy1Component implements OnInit {
         }
   
         if (!this.user.profile_image) {
-          this.user.profile_image = 'assets/default-profile.png';
+          this.user.profile_image = '/assets/default-avatar.png';
         }
       },
       (error) => {

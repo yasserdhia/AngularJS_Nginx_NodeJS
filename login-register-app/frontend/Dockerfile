@@ -4,15 +4,15 @@
 FROM node:22.5.1 AS frontend-builder
 
 WORKDIR /app
+
+# نسخ ملفات package.json و package-lock.json فقط
 COPY ./frontend/package*.json ./
 
-# تثبيت Angular CLI
+# تثبيت Angular CLI والحزم
 RUN npm install -g @angular/cli@latest
-
-# تثبيت الحزم مع استخدام --legacy-peer-deps لتجنب مشاكل التوافق
 RUN npm install --legacy-peer-deps
 
-# نسخ باقي ملفات المشروع
+# نسخ بقية ملفات المشروع، بما في ذلك مجلد assets
 COPY ./frontend .
 
 # بناء المشروع باستخدام Angular CLI
@@ -24,6 +24,7 @@ FROM nginx:alpine
 # إزالة محتويات /usr/share/nginx/html لتجنب تعارض الملفات
 RUN rm -rf /usr/share/nginx/html/*
 
+# تحديد مجلد العمل
 WORKDIR /usr/share/nginx/html
 
 # نسخ ملفات البناء إلى مجلد Nginx
