@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid"> <!-- استخدم container-fluid لضمان أن الـ navbar تغطي عرض الصفحة بالكامل -->
+  <div class="container-fluid">
     <a class="navbar-brand" href="#">MyStore</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav"> <!-- إزالة ms-auto لجعل العناصر على جهة اليسار -->
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
@@ -20,14 +20,36 @@
         <li class="nav-item">
           <a class="nav-link" href="/products">Products</a>
         </li>
-         <!-- إضافة رابط صفحة Users -->
-         <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="/users">Users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/admin">Admin Panel</a> <!-- رابط لوحة التحكم -->
+          <a class="nav-link" href="/admin">Admin Panel</a>
         </li>
       </ul>
+<!-- عرض الصورة واسم المستخدم في حالة تسجيل الدخول -->
+<ul class="navbar-nav ms-auto">
+  <li *ngIf="isLoggedIn" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <img [src]="user.profile_image" alt="Profile Image" class="profile-img">
+      <span class="user-name">{{ user.name }}</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="https://localhost/profile/strategy1">View Profile</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+    </ul>
+  </li>
+
+  <!-- عرض الصورة الافتراضية في حالة عدم تسجيل الدخول -->
+  <li *ngIf="!isLoggedIn" class="nav-item">
+    <a class="nav-link d-flex align-items-center" href="/login">
+      <img src="assets/default-profile.png" alt="Default Profile Image" class="profile-img">
+      <span class="user-name">Guest</span>
+    </a>
+  </li>
+</ul>
+
     </div>
   </div>
 </nav>

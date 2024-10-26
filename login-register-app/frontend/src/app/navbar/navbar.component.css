@@ -1,11 +1,12 @@
+/* تصميم الـ navbar */
 .navbar {
-  position: fixed; /* لجعل الـ navbar ثابتة في أعلى الصفحة */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* لجعل الـ navbar تمتد بعرض الصفحة */
-  z-index: 9999; /* للتأكد من أنها تكون أعلى من جميع المحتويات الأخرى */
-  background-color: #343a40; /* لون خلفية الـ navbar */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* إضافة ظل */
+  width: 100%;
+  z-index: 9999;
+  background-color: #343a40;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
@@ -24,8 +25,49 @@
   color: #ffc107;
 }
 
+/* صورة البروفايل */
+.profile-img {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  margin-right: 10px; /* مسافة بين الصورة والنص */
+}
+
+/* تنسيق النص بجانب الصورة */
+.user-name {
+  font-weight: 600;
+  color: #f8f9fa;
+}
+
+/* تنسيق القائمة المنسدلة */
+.navbar .dropdown-menu {
+  min-width: 200px;
+  text-align: left;
+  background-color: #343a40;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .dropdown-menu .dropdown-item {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #f8f9fa;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+  background-color: #ffc107;
+  color: #343a40;
+}
+
+.navbar .dropdown-menu .dropdown-divider {
+  margin: 0;
+  border-color: #ffc107;
+}
+
 body {
-  padding-top: 80px; /* يجب ضبط هذا بناءً على ارتفاع الـ navbar */
+  padding-top: 80px;
   margin: 0;
   box-sizing: border-box;
 }
