@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = 'https://localhost/api'; // URL الخاص بالـ backend
+
+  constructor(private http: HttpClient) {}
 
   // فحص حالة تسجيل الدخول
   getUserStatus() {
-    const isLoggedIn = !!localStorage.getItem('token'); // افتراض تسجيل الدخول بناءً على وجود التوكن
+    const isLoggedIn = !!localStorage.getItem('token');
     return of(isLoggedIn);
   }
 
-  // جلب بيانات المستخدم (في هذه الحالة يمكن تخزينها في الذاكرة أو استرجاعها من الـ localStorage)
+  // جلب بيانات المستخدم
   getUserProfile() {
-    const user = {
-      name: 'John Doe',
-      profile_image: 'assets/profile-image.png'
-    };
-    return of(user);
+    // هنا يتم جلب بيانات المستخدم من الـ backend باستخدام التوكن المخزن
+    return this.http.get<any>(`${this.apiUrl}/user/profile`);
   }
 
   // تسجيل الخروج
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 }

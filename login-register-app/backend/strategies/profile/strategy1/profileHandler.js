@@ -22,12 +22,13 @@ module.exports = (req, res) => {
                 return res.status(404).json({ error: 'User not found' });
             }
 
-            // Update profile image link
-            if (results[0].profile_image) {
-                results[0].profile_image = `http://localhost:3000/uploads/${results[0].profile_image}`;
-            }
+            // Update profile image link to include the full URL for frontend display
+            const user = results[0];
+            user.profile_image = user.profile_image 
+                ? `https://localhost/uploads/${user.profile_image}` 
+                : 'https://localhost/assets/default-avatar.png';
 
-            res.status(200).json(results[0]);
+            res.status(200).json(user);
         });
     });
 };

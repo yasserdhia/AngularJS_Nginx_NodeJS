@@ -11,7 +11,7 @@ module.exports = (config) => (req, res, next) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to authenticate token' });
     }
-    req.user = decoded;
+    req.user = decoded; // Ensure user ID is available for fetching profile details
     next();
   });
 };
