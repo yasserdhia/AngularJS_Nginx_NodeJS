@@ -25,7 +25,7 @@ module.exports = (req, res) => {
             return res.status(401).json({ error: 'Incorrect password' });
         }
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
 
         res.status(200).json({
             message: 'Login successful',
