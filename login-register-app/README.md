@@ -218,3 +218,4 @@ markdown
 2. Update any environment-specific configurations as needed.
 
 This `README.md` provides detailed steps for both local and Docker installations and should work well for your project
+
